@@ -26,7 +26,7 @@ Test::XML::Easy - test XML with XML::Easy
     use Test::More tests => 2;
     use Test::XML::Easy;
 
-    test_xml $some_xml, <<'ENDOFXML', "a test";
+    is_xml $some_xml, <<'ENDOFXML', "a test";
     <?xml version="1.0" encoding="latin-1">
     <foo>
        <bar/>
@@ -34,12 +34,16 @@ Test::XML::Easy - test XML with XML::Easy
     </foo>
     ENDOFXML
 
-    test_xml $some_xml, <<'ENDOFXML', { ignore_whitespace => 1, description => "my test" };
+    is_xml $some_xml, <<'ENDOFXML', { ignore_whitespace => 1, description => "my test" };
     <foo>
        <bar/>
        <baz buzz="bizz">fuzz</baz>
     </foo>
     ENDOFXML
+
+    isnt_xml $some_xml, $some_xml_it_must_not_be;
+    
+    is_well_formed_xml $some_xml;
 
 =head1 DESCRIPTION
 
@@ -50,11 +54,13 @@ By "equal" we mean that the two documents would construct the same DOM model
 when parsed, so things like character sets and if you've used two tags
 or a self closing tags aren't important.
 
-=head2 Function
+This modules is a strict superset of Test::XML's interface.
+
+=head2 Functions
 
 =over
 
-=item test_xml($xml_to_test, $expected_xml, $options_hashref)
+=item is_xml($xml_to_test, $expected_xml, $options_hashref)
 
 Tests that the passed XML is the same as the expected XML.
 XML can be passed into this function in one of two ways.
@@ -164,15 +170,15 @@ If a third argument is passed to this function and that argument
 is not a hashref then it will be assumed that this argument is
 the the description as passed above.  i.e.
 
-  test_xml $xml, $expected, "my test";
+  is_xml $xml, $expected, "my test";
 
 is the same as
 
-  test_xml $xml, $expected, { description => "my test" };
+  is_xml $xml, $expected, { description => "my test" };
 
 =cut
 
-sub test_xml($$;$) {
+sub is_xml($$;$) {
   my $got = shift;
   my $expected = shift;
 
@@ -205,16 +211,16 @@ sub test_xml($$;$) {
     $got = $parsed;
   }
 
-  if(_test_xml($got,$expected,$options,"", {})) {
+  if(_is_xml($got,$expected,$options,"", {})) {
     $tester->ok(1,$options->{description});
     return 1;
   }
 
   return;
 }
-push @EXPORT, "test_xml";
+push @EXPORT, "is_xml";
 
-sub _test_xml {
+sub _is_xml {
   my $got      = shift;
   my $expected = shift;
   my $options  = shift;
@@ -393,8 +399,8 @@ sub _test_xml {
 
     # simply recurse for that node
     # (don't bother checking if the expected node is defined or not, the case
-    # where it isn't is handled at the start of _test_xml)
-    return unless _test_xml(
+    # where it isn't is handled at the start of _is_xml)
+    return unless _is_xml(
       $got_content->[$i],
       $expected_content->[$i],
       $options,
@@ -415,11 +421,45 @@ sub _test_xml {
   return 1;
 }
 
+=item isnt_xml($xml_to_test, $expected_xml, $options_hashref)
+
+Exactly the same as C<is_xml> (taking exactly the same options) but passes
+if and only if the xml to test is different to the expected xml.
+
+=cut
+
+sub isnt_xml($$;$) {
+  # TODO
+}
+push @EXPORT, "isnt_xml";
+
+=item is_well_formed_xml($string_containing_xml, $description)
+
+Passes if and only if the string passed contains well formed XML.
+
+=cut
+
+sub is_well_formed_xml($$;$) {
+  # TODO
+}
+push @EXPORT, "is_well_formed_xml";
+
+=item isnt_well_formed_xml($string_not_containing_xml, $description)
+
+Passes if and only if the string passed does not contain well formed XML.
+
+=cut
+
+sub isnt_well_formed_xml($$;$) {
+  # TODO
+}
+push @EXPORT, "isnt_well_formed_xml";
+
 =back
 
 =head2 A note on Character Handling
 
-If you do not pass it an XML::Easy::Element object then C<test_xml> will happly parse
+If you do not pass it an XML::Easy::Element object then C<is_xml> will happly parse
 XML from the characters contained in whatever scalars you passed it.  It will not
 (and cannot) correctly parse data from a scalar that contains binary data (e.g. that
 you've sucked in from a raw file handle) as it would have no idea what characters
@@ -439,7 +479,7 @@ may or may not help you understand this more (they at the very least contain a
 cheatsheet for conversion.)
 
 The author highly recommends those of you using latin-1 characters from a utf-8 source
-to use Test::utf8 to check the string for common mistakes before handing it test_xml.
+to use Test::utf8 to check the string for common mistakes before handing it is_xml.
 
 =head1 AUTHOR
 

@@ -5,4 +5,4 @@ BEGIN {
   use_ok('Test::XML::Easy');
 }
 
-ok(defined &test_xml,"exported function okay");
+ok(defined &is_xml,"exported function okay");

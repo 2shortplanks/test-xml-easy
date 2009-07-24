@@ -16,7 +16,7 @@ test_diag(q{womble      zoot   nurple'});
 test_diag(q{expected:});
 test_diag(q{  'bungle           womble});
 test_diag(q{zoot nurple'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_different_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_different_whitespace=>0});
 <foo>bungle 
 womble      zoot   nurple</foo>
 ENDOFXML
@@ -26,7 +26,7 @@ ENDOFXML2
 test_test("failing internal whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_different_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_different_whitespace=>1});
 <foo>bungle 
 womble      zoot   nurple</foo>
 ENDOFXML
@@ -36,7 +36,7 @@ ENDOFXML2
 test_test("passing internal whitespace ignore_different_whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>bungle 
 womble      zoot   nurple</foo>
 ENDOFXML
@@ -47,7 +47,7 @@ test_test("passing internal whitespace ignore_whitespace");
 
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>bungle 
 womble      zoot   nurple</foo>
 ENDOFXML

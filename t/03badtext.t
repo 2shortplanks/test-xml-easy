@@ -14,7 +14,7 @@ test_diag("found:");
 test_diag("  'betty'");
 test_diag("expected:");
 test_diag("  'wilma'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>betty</fred><barney>wilma</barney></flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><barney>betty</barney></flintstones>
@@ -28,7 +28,7 @@ test_diag("found:");
 test_diag("  'betty'");
 test_diag("expected:");
 test_diag("  'wilma'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>betty</fred><barney>wilma</barney></flintstones>
 ENDOFXML
 <flintstones><fred>wilma<zingle/></fred><barney>betty</barney></flintstones>
@@ -42,7 +42,7 @@ test_diag("found:");
 test_diag("  'betty'");
 test_diag("expected:");
 test_diag("  'wilma'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>betty<zingle/></fred><barney>wilma</barney></flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><barney>betty</barney></flintstones>
@@ -56,7 +56,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones>womble<fred>wilma</fred><barney>betty</barney></flintstones>
 ENDOFXML
 <flintstones>wibble<fred>wilma</fred><barney>betty</barney></flintstones>
@@ -70,7 +70,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>wilma</fred>womble<barney>betty</barney></flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred>wibble<barney>betty</barney></flintstones>
@@ -85,7 +85,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>wilma</fred><fred>pebbles</fred>womble<barney>betty</barney></flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><fred>pebbles</fred>wibble<barney>betty</barney></flintstones>
@@ -99,7 +99,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>wilma</fred><fred>pebbles</fred>womble</flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><fred>pebbles</fred>wibble</flintstones>
@@ -113,7 +113,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>wilma</fred><fred>pebbles</fred>womble<zingle/></flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><fred>pebbles</fred>wibble</flintstones>
@@ -128,7 +128,7 @@ test_diag("found:");
 test_diag("  'womble'");
 test_diag("expected:");
 test_diag("  'wibble'");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <flintstones><fred>wilma</fred><fred>pebbles</fred>womble</flintstones>
 ENDOFXML
 <flintstones><fred>wilma</fred><fred>pebbles</fred>wibble<zingle/></flintstones>

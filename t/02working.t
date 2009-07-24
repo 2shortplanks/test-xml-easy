@@ -7,7 +7,7 @@ use Test::More tests => 1;
 use Test::Builder::Tester;
 use Test::XML::Easy;
 
-test_xml(<<'ENDOFXML',<<'ENDOFXML2', { description => "it works"});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2', { description => "it works"});
 <foo>
   This is some text blah blah blah
   <flintstones fred="wilma" barney="betty" />

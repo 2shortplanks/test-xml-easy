@@ -17,7 +17,7 @@ test_diag(q{found:});
 test_diag(q{  '  zippy'});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <foo>  zippy</foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -25,7 +25,7 @@ ENDOFXML2
 test_test("failing leading whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
 <foo>  zippy</foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -41,7 +41,7 @@ test_diag(q{  '});
 test_diag(q{  zippy'});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>0});
 <foo>
   zippy</foo>
 ENDOFXML
@@ -50,7 +50,7 @@ ENDOFXML2
 test_test("failing leading whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
 <foo>  
 zippy</foo>
 ENDOFXML
@@ -59,7 +59,7 @@ ENDOFXML2
 test_test("passing leading whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_leading_whitespace=>1});
 <foo>  zippy  </foo>
 ENDOFXML
 <foo>zippy  </foo>
@@ -77,7 +77,7 @@ test_diag(q{found:});
 test_diag(q{  '  zippy'});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
 <foo>  zippy</foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -85,7 +85,7 @@ ENDOFXML2
 test_test("failing leading whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>  zippy</foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -101,7 +101,7 @@ test_diag(q{  '});
 test_diag(q{  zippy'});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
 <foo>
   zippy</foo>
 ENDOFXML
@@ -110,7 +110,7 @@ ENDOFXML2
 test_test("failing leading whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>  
 zippy</foo>
 ENDOFXML
@@ -119,7 +119,7 @@ ENDOFXML2
 test_test("passing leading whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>  zippy</foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -137,7 +137,7 @@ test_diag(q{found:});
 test_diag(q{  'zippy  '});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>0});
 <foo>zippy  </foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -145,7 +145,7 @@ ENDOFXML2
 test_test("failing trailing whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
 <foo>zippy  </foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -161,7 +161,7 @@ test_diag(q{  'zippy});
 test_diag(q{  '});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>0});
 <foo>zippy
   </foo>
 ENDOFXML
@@ -170,7 +170,7 @@ ENDOFXML2
 test_test("failing trailing whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
 <foo>zippy
   </foo>
 ENDOFXML
@@ -179,7 +179,7 @@ ENDOFXML2
 test_test("passing trailing whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_trailing_whitespace=>1});
 <foo>  zippy  </foo>
 ENDOFXML
 <foo>  zippy</foo>
@@ -196,7 +196,7 @@ test_diag(q{found:});
 test_diag(q{  'zippy  '});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
 <foo>zippy  </foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -204,7 +204,7 @@ ENDOFXML2
 test_test("failing trailing whitespace");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>zippy  </foo>
 ENDOFXML
 <foo>zippy</foo>
@@ -220,7 +220,7 @@ test_diag(q{  'zippy});
 test_diag(q{  '});
 test_diag(q{expected:});
 test_diag(q{  'zippy'});
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>0});
 <foo>zippy
   </foo>
 ENDOFXML
@@ -229,7 +229,7 @@ ENDOFXML2
 test_test("failing trailing whitespace return");
 
 test_out("ok 1 - xml test");
-test_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
+is_xml(<<'ENDOFXML',<<'ENDOFXML2',{ignore_whitespace=>1});
 <foo>zippy
   </foo>
 ENDOFXML
