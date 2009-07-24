@@ -183,7 +183,7 @@ sub test_xml($$;$) {
   # munge the options
   my $options = shift;
   $options = { description => $options } unless ref $options;
-  $options->{description} = "xml test" unless defined $options->{description};
+  $options = { %{$options}, description => "xml test" } unless defined $options->{description};
   unless (blessed $expected && $expected->isa("XML::Easy::Element")) {
     # throws an exception if there isn't a problem.
     $expected = eval { xml10_read_document($expected) };
