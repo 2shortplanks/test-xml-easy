@@ -300,7 +300,7 @@ sub _test_xml {
     }
     $tester->diag("...the attribute contents matched") if $options->{verbose};
   }
-  if (%got_attr) {
+  if (keys %got_attr) {
     $tester->ok(0, $options->{description});
     $tester->diag("found extra unexpected attribute".(keys %got_attr>1 ? "s":"").":");
     $tester->diag("  '$path/\@$_'") foreach sort keys %got_attr;
