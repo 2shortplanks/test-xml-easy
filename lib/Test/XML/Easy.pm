@@ -299,7 +299,6 @@ sub _test_xml {
       return;
     }
     $tester->diag("...the attribute contents matched") if $options->{verbose};
-    delete $got_attr{ $attr };
   }
   if (%got_attr) {
     $tester->ok(0, $options->{description});
