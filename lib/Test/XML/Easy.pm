@@ -235,7 +235,7 @@ sub _test_xml {
   # nb add one to the index because xpath is weirdly 1-index
   # not 0-indexed like most other modern languages
   my $got_name       = $got->type_name();
-  my $got_index      = $index->{ $got_name } + 1;
+  my $got_index      = ($index->{ $got_name } || 0) + 1;
 
   ### check if we've got a node to compare to
 
@@ -249,7 +249,7 @@ sub _test_xml {
 
   # work out the details of the node we're comparing with
   my $expected_name  = $expected->type_name();
-  my $expected_index = $index->{ $expected_name } + 1;
+  my $expected_index = ($index->{ $expected_name } || 0) + 1;
 
   # alter the index hashref to record we've seen another node
   # of this name
