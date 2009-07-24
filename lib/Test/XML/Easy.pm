@@ -50,37 +50,11 @@ By "equal" we mean that the two documents would construct the same DOM model
 when parsed, so things like character sets and if you've used two tags
 or a self closing tags aren't important.
 
-There's a few cavets here:
-
-=over
-
-=item No namespace support
-
-As this is only an XML 1.0 parser, and not XML Namespaces aware the following document
-
-  <foo:fred xmlns:foo="http://www.twoshortplanks.com/namespaces/test/fred" />
-
-Is considered to be different to
-
-  <bar:fred xmlns:bar="http://www.twoshortplanks.com/namespaces/test/fred" />
-
-=item Extra entity expansion isn't performed
-
-(some comments here about how entities are ignored)
-
-=item Only checks Element, Attribute and Text nodes
-
-We currently ignore all nodes that aren't Element, Attribute or Text.  This means
-that two documents can differ with their comments and processing directives without
-causing the test to fail.  It also means the documents can differ in the...
-
-=back
-
 =head2 Function
 
 =over
 
-=item test_xml($xml, $expected, $options_hashref)
+=item test_xml($xml_to_test, $expected_xml, $options_hashref)
 
 Tests that the passed XML is the same as the expected XML.
 XML can be passed into this function in one of two ways.
@@ -444,6 +418,30 @@ sub _test_xml {
 
 =back
 
+=head2 A note on Character Handling
+
+If you do not pass it an XML::Easy::Element object then C<test_xml> will happly parse
+XML from the characters contained in whatever scalars you passed it.  It will not
+(and cannot) correctly parse data from a scalar that contains binary data (e.g. that
+you've sucked in from a raw file handle) as it would have no idea what characters
+those octlets would represent
+
+As long as your XML document contains legal characters from the ASCII range (i.e.
+chr(1) to chr(127)) this distintion will not matter to you.
+
+However, if you use characters above codepoint 127 then you will probably need to
+convert any bytes you have read in into characters.  This is usually done by using
+C<Encode::decode>, or by using a PerlIO layer on the filehandle as you read the data
+in.
+
+If you don't know what any of this means I suggest you read the Encode::encode manpage
+very carefully.  Tom Insam's slides at L<http://jerakeen.org/talks/perl-loves-utf8/>
+may or may not help you understand this more (they at the very least contain a
+cheatsheet for conversion.)
+
+The author highly recommends those of you using latin-1 characters from a utf-8 source
+to use Test::utf8 to check the string for common mistakes before handing it test_xml.
+
 =head1 AUTHOR
 
 Mark Fowler, C<< <mark@twoshortplanks.com> >>
@@ -455,17 +453,60 @@ under the same terms as Perl itself.
 
 =head1 BUGS
 
+There's a few cavets when using this module:
+
+=over
+
+=item Not a validating parser
+
+Infact, we don't process (or compare) DTDs at all.  These nodes are completely
+ignored (it's as if you didn't include them in the string at all.)
+
+=item Comments and processing instructions are ignored
+
+We totally ignore comments and processing instructions, and it's as
+if you didn't include them in the string at all either.
+
+=item Limited entity handling
+
+Currently we only support the five "core" named entities (i.e. C<&amp;>,
+C<&lt;>, C<&gt;>, C<&apos;> and C<&quot;>) and numerical entities
+(in decimal or hex form.)  It is not possible to declare further named
+entities and the precence of undeclared named entities will either cause
+an exception to be thrown (in the case of the expected string) or the test to
+fail (in the case of the string you are testing)
+
+=item No namespace support
+
+Currently this is only an XML 1.0 parser, and not XML Namespaces aware (further
+options may be added to later version of this module)
+
+This means the following document:
+
+  <foo:fred xmlns:foo="http://www.twoshortplanks.com/namespaces/test/fred" />
+
+Is considered to be different to
+
+  <bar:fred xmlns:bar="http://www.twoshortplanks.com/namespaces/test/fred" />
+
+=item Perlish whitespace handling
+
 This module considers "whitespace" to be whatever matches a \s* in a
 regular expression.  This is not strictly identical to what the XML
 specification considers to be whitespace.
 
-Please report any bugs or feature requests to
-C<bug-test-xml-libxml@rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org>.  I will be notified, and then you'll automatically be
-notified of progress on your bug as I make changes.
+=back
+
+Please see http://twoshortplanks.com/dev/testxmleasy for
+details of how to submit bugs, access the source control for
+this project, and contact the author.
 
 =head1 SEE ALSO
 
+L<Test::More> (for instructions on how to test), L<XML::Easy> (for info
+on the underlying xml parser) and L<Test::XML> (for a similar module that
+tests using XML::Parser)
+
 =cut
 
-1; # End of Test::XML::LibXML
+1; # End of Test::XML::Easy
