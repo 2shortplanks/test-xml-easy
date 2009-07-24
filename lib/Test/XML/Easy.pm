@@ -274,9 +274,9 @@ sub _test_xml {
   # we want to modify these to keep track of what
   # we've processed, so we need to copy them
   my %got_attr      = %{ $got->attributes };
-  my %expected_attr = %{ $expected->attributes };
+  my $expected_attr = $expected->attributes;
 
-  foreach my $attr (keys %expected_attr) {
+  foreach my $attr (keys %{ $expected_attr }) {
     $tester->diag("checking attribute '$path/\@$attr'...") if $options->{verbose};
 
     if (!exists($got_attr{$attr})) {
@@ -286,7 +286,7 @@ sub _test_xml {
     }
     $tester->diag("...found attribute") if $options->{verbose};
 
-    my $expected_string = $expected_attr{$attr};
+    my $expected_string = $expected_attr->{$attr};
     my $got_string      = delete $got_attr{$attr};
 
     if ($expected_string ne $got_string) {
