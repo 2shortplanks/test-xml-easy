@@ -1,11 +1,13 @@
 use inc::Module::Install;
 
 # Define metadata
-name           'Tie-DataUUID';
-all_from       'lib/Tie/DataUUID.pm';
+name           'Test-XML-Easy';
+all_from       'lib/Test/XML/Easy.pm';
 
-requires       'Data::UUID'  => '0';
+requires       'XML::Easy'  => '0.002';
+
 test_requires  'Test::More'  => '0';
+test_requires  'Test::Builder::Tester' => '0';
 
 license 'perl';
 
