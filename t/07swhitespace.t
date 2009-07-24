@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 use Test::Builder::Tester;
 use Test::XML::Easy;
 
