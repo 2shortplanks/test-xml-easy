@@ -42,7 +42,7 @@ Test::XML::Easy - test XML with XML::Easy
     ENDOFXML
 
     isnt_xml $some_xml, $some_xml_it_must_not_be;
-    
+
     is_well_formed_xml $some_xml;
 
 =head1 DESCRIPTION
@@ -421,15 +421,62 @@ sub _is_xml {
   return 1;
 }
 
-=item isnt_xml($xml_to_test, $expected_xml, $options_hashref)
+=item isnt_xml($xml_to_test, $not_expected_xml, $options_hashref)
 
 Exactly the same as C<is_xml> (taking exactly the same options) but passes
-if and only if the xml to test is different to the expected xml.
+if and only what is passed is different to the expected XML.
+
+By different, of course, we mean schematically different according to the
+XML 1.0 specification.  For example, this will fail:
+
+  isnt_xml "<foo/>", "<foo></foo>";
+
+as those are schematically the same XML documents.
+
+However, it's worth noting that the first argument doesn't even have to be
+valid XML for the test to pass.  Both these pass as they're not schemantically
+identical to the output:
+
+  isnt_xml undef, $not_expecteded_xml;
+  isnt_xml "<foo>", $not_expected_xml;
+
+as invalid XML is not ever schemanitcally identical to a valid XML document.
+
+If you want to insist what you pass in is valid XML, but just not the
+same as the other xml document you pass in then you can use two tests:
+
+  is_well_formed_xml $xml;
+  isnt_xml $xml, $not_expected_xml;
 
 =cut
 
 sub isnt_xml($$;$) {
-  # TODO
+  my $got = shift;
+  my $expected = shift;
+  my $options = shift;
+
+  $options = { description => $options } unless ref $options eq "HASH";
+  $options = { %{$options}, description => "xml well formed test" }
+    unless defined $options->{description};
+
+  # temporarly ignore test output and just get the result of running
+  # the is_xml function as normal
+  $tester = bless {}, "Test::XML::Easy::Ignore";
+  my $result = eval { is_xml($got, $expected, $options) ? 0 : 1 };
+  $tester = Test::Builder->new();
+
+  # did we get an error?  Note we don't check $@ directly incase
+  # it's been reset by a weird DESTROY() eval...
+  unless (length $result) { croak $@; }
+
+  if ($result) {
+    $tester->ok(1, $options->{description});
+    return 1;
+  }
+
+  $tester->ok(0, $options->{description});
+  $tester->diag("Unexpectedly matched the XML we didn't want to get");
+  return;
 }
 push @EXPORT, "isnt_xml";
 
@@ -577,3 +624,13 @@ tests using XML::Parser)
 =cut
 
 1; # End of Test::XML::Easy
+
+package Test::XML::Easy::Ignore;
+
+# a handy class you can bless your tester into so we ignore all
+# calls and don't actually produce any test output
+
+sub ok { return }
+sub diag { return }
+
+1; # End of Test::XML::Easy::Ignore;
