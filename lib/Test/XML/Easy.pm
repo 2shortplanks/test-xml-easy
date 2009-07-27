@@ -11,7 +11,7 @@ our $VERSION = '0.01';
 
 use Carp qw(croak);
 
-use XML::Easy::Text qw(xml10_read_document);
+use XML::Easy::Text qw(xml10_read_document xml10_write_document);
 use XML::Easy::Classify qw(is_xml_element);
 use XML::Easy::Syntax qw($xml10_s_rx);
 
@@ -191,6 +191,11 @@ This setting has no effect on attribute comparisons.
 If true, print obsessive amounts of debug info out while
 checking things
 
+=item show_xml
+
+This prints out in the diagnostic messages the expected and
+actual XML on failure.
+
 =back
 
 If a third argument is passed to this function and that argument
@@ -214,6 +219,10 @@ sub is_xml($$;$) {
   }
 
   # munge the options
+
+  my $got_original      = $got;
+  my $expected_original = $expected;
+
   my $options = shift;
   $options = { description => $options } unless ref $options eq "HASH";
   $options = { %{$options}, description => "xml test" } unless defined $options->{description};
@@ -243,12 +252,26 @@ sub is_xml($$;$) {
     return 1;
   }
 
+  if ($options->{show_xml}) {
+    $tester->diag("The XML that we expected was:");
+    if (is_xml_element($expected_original))
+      { $tester->diag(xml10_write_document($expected_original)) }
+    else
+      { $tester->diag($expected_original) }
+
+    $tester->diag("The XML that we received was:");
+    if (is_xml_element($got_original))
+      { $tester->diag(xml10_write_document($got_original)) }
+    else
+      { $tester->diag($got_original) }
+  }
+
   return;
 }
 push @EXPORT, "is_xml";
 
 sub _is_xml {
-  my $got      = shift;
+  my $got = shift;
   my $expected = shift;
   my $options  = shift;
 
@@ -507,6 +530,13 @@ sub isnt_xml($$;$) {
 
   $tester->ok(0, $options->{description});
   $tester->diag("Unexpectedly matched the XML we didn't expect");
+  if ($options->{show_xml}) {
+    $tester->diag("The XML that we received was:");
+    if (is_xml_element($got))
+      { $tester->diag(xml10_write_document($got)) }
+    else
+      { $tester->diag($got) }
+  }
   return;
 }
 push @EXPORT, "isnt_xml";
