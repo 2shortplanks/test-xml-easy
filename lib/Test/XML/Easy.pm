@@ -10,9 +10,9 @@ use Exporter;
 our $VERSION = '0.01';
 
 use Carp qw(croak);
-use Scalar::Util qw(blessed);
 
 use XML::Easy::Text qw(xml10_read_document);
+use XML::Easy::Classify qw(is_xml_element);
 
 use Test::Builder;
 my $tester = Test::Builder->new();
@@ -216,7 +216,7 @@ sub is_xml($$;$) {
   my $options = shift;
   $options = { description => $options } unless ref $options eq "HASH";
   $options = { %{$options}, description => "xml test" } unless defined $options->{description};
-  unless (blessed $expected && $expected->isa("XML::Easy::Element")) {
+  unless (is_xml_element($expected)) {
     # throws an exception if there isn't a problem.
     $expected = eval { xml10_read_document($expected) };
     if ($@) {
@@ -225,7 +225,7 @@ sub is_xml($$;$) {
   }
 
   # convert into something useful if needed
-  unless (blessed($got) && $got->isa("XML::Easy::Element")) {
+  unless (is_xml_element($got)) {
     my $parsed = eval { xml10_read_document($got) };
     if ($@) {
       $tester->ok(0, $options->{description});
