@@ -48,40 +48,41 @@ Test::XML::Easy - test XML with XML::Easy
 =head1 DESCRIPTION
 
 A simple testing tool, with only pure Perl dependancies, that checks if
-two XML documents are equal with respect to the XML 1.0 specification.
+two XML documents are "the same".  In particular this module will check if
+the documents schemantically equal as defined by the XML 1.0 specification
+(i.e. that the two documents would construct the same DOM
+model when parsed, so things like character sets and if you've used two tags
+or a self closing tags aren't important.)
 
-By "equal" we mean that the two documents would construct the same DOM model
-when parsed, so things like character sets and if you've used two tags
-or a self closing tags aren't important.
-
-This modules is a strict superset of Test::XML's interface.
+This modules is a strict superset of B<Test::XML>'s interface meaning if you
+were using that module to check if two identical documents were the same then
+this module should function as a drop in replacement.  Be warned, however,
+that this module by default is a lot stricter about how the XML documents
+are allowed to differ.
 
 =head2 Functions
+
+This module, by default, exports a number of functions into your namespace.
 
 =over
 
 =item is_xml($xml_to_test, $expected_xml, $options_hashref)
 
-Tests that the passed XML is the same as the expected XML.
-XML can be passed into this function in one of two ways.
+Tests that the passed XML is "the same" as the expected XML.
 
-=over
+XML can be passed into this function in one of two ways;  Either you can
+provide a string (which the function will parse for you) or you can pass in
+an B<XML::Easy::Element> that you've constructed yourself somehow.
 
-=item An XML::Easy::Element
-
-=item A string
-
-=back
-
-This funtion takes several options as the third argument.
-
-These can be passed in as a hashref:
+This funtion takes several options as the third argument.  These can be
+passed in as a hashref:
 
 =over
 
 =item description
 
-The name of the test that will be passed out.
+The name of the test that will be used in constructing the C<ok> / C<not ok>
+test output.
 
 =item ignore_whitespace
 
@@ -102,11 +103,27 @@ Is considered the same as
     foo bar baz
   </p>
 
-Note that this is only between elements, so this document
+And even
+
+  <p>
+    this is my cat:<img src="http://myfo.to/KsSc.jpg" />
+  </p>
+
+Is considered the same as:
+
+  <p>
+    this is my cat: <img src="http://myfo.to/KsSc.jpg" />
+  </p>
+
+Even though, to a web-browser, that extra space is significant whitespace
+and the two documents would be renderd differently.
+
+However, as comments are completely ignored (we treat them as if they were
+never even in the document) the following:
 
   <p>foo<!-- a comment -->bar</p>
 
-Would be considered different to
+would be considered different to
 
   <p>
     foo
@@ -114,8 +131,17 @@ Would be considered different to
     bar
   </p>
 
-Due to the additional whitespace between "foo" and the comment
-and the comment and "bar".
+As it's the same as comparing the string
+
+  "foobar"
+
+And:
+
+    "foo
+    
+    bar"
+
+The same is true for processing instructions and DTD declarations.
 
 =item ignore_leading_whitespace
 
@@ -134,7 +160,7 @@ immedately after.
 If set to a true value ignores differences in what characters
 make up whitespace in text nodes.  In other words, this option
 makes the comparison only care that wherever there's whitespace
-in the expected xml there's any whitespace in the actual xml
+in the expected XML there's any whitespace in the actual XML
 at all, not what that whitespace is made up of.
 
 It means the following
@@ -424,7 +450,7 @@ sub _is_xml {
 =item isnt_xml($xml_to_test, $not_expected_xml, $options_hashref)
 
 Exactly the same as C<is_xml> (taking exactly the same options) but passes
-if and only what is passed is different to the expected XML.
+if and only if what is passed is different to the not expected XML.
 
 By different, of course, we mean schematically different according to the
 XML 1.0 specification.  For example, this will fail:
@@ -435,7 +461,7 @@ as those are schematically the same XML documents.
 
 However, it's worth noting that the first argument doesn't even have to be
 valid XML for the test to pass.  Both these pass as they're not schemantically
-identical to the output:
+identical to the not expected XML:
 
   isnt_xml undef, $not_expecteded_xml;
   isnt_xml "<foo>", $not_expected_xml;
@@ -447,6 +473,10 @@ same as the other xml document you pass in then you can use two tests:
 
   is_well_formed_xml $xml;
   isnt_xml $xml, $not_expected_xml;
+
+This function accepts the C<verbose> option (just as C<is_xml> does) but
+turning it on doesn't actually output anything extra - there's not useful this
+function can output that would help you diagnose the failure case.
 
 =cut
 
@@ -534,10 +564,10 @@ push @EXPORT, "isnt_well_formed_xml";
 
 =head2 A note on Character Handling
 
-If you do not pass it an XML::Easy::Element object then C<is_xml> will happly parse
-XML from the characters contained in whatever scalars you passed it.  It will not
+If you do not pass it an XML::Easy::Element object then these functions will happly parse
+XML from the characters contained in whatever scalars you passed in.  They will not
 (and cannot) correctly parse data from a scalar that contains binary data (e.g. that
-you've sucked in from a raw file handle) as it would have no idea what characters
+you've sucked in from a raw file handle) as they would have no idea what characters
 those octlets would represent
 
 As long as your XML document contains legal characters from the ASCII range (i.e.
@@ -554,7 +584,7 @@ may or may not help you understand this more (they at the very least contain a
 cheatsheet for conversion.)
 
 The author highly recommends those of you using latin-1 characters from a utf-8 source
-to use Test::utf8 to check the string for common mistakes before handing it is_xml.
+to use B<Test::utf8> to check the string for common mistakes before handing it C<is_xml>.
 
 =head1 AUTHOR
 
@@ -583,7 +613,7 @@ if you didn't include them in the string at all either.
 
 =item Limited entity handling
 
-Currently we only support the five "core" named entities (i.e. C<&amp;>,
+We only support the five "core" named entities (i.e. C<&amp;>,
 C<&lt;>, C<&gt;>, C<&apos;> and C<&quot;>) and numerical entities
 (in decimal or hex form.)  It is not possible to declare further named
 entities and the precence of undeclared named entities will either cause
@@ -593,7 +623,7 @@ fail (in the case of the string you are testing)
 =item No namespace support
 
 Currently this is only an XML 1.0 parser, and not XML Namespaces aware (further
-options may be added to later version of this module)
+options may be added to later version of this module to enable namespace support)
 
 This means the following document:
 
@@ -609,9 +639,15 @@ This module considers "whitespace" to be whatever matches a \s* in a
 regular expression.  This is not strictly identical to what the XML
 specification considers to be whitespace.
 
+=item No node reordering support
+
+Unlike B<Test::XML> this module considers the order of sibling nodes to be
+significant, and you cannot tell it to ignore the differring order of nodes
+when comparing the expected and actual output.
+
 =back
 
-Please see http://twoshortplanks.com/dev/testxmleasy for
+Please see L<http://twoshortplanks.com/dev/testxmleasy> for
 details of how to submit bugs, access the source control for
 this project, and contact the author.
 
@@ -619,7 +655,7 @@ this project, and contact the author.
 
 L<Test::More> (for instructions on how to test), L<XML::Easy> (for info
 on the underlying xml parser) and L<Test::XML> (for a similar module that
-tests using XML::Parser)
+tests using XML::SchemanticDiff)
 
 =cut
 
