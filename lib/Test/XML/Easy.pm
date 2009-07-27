@@ -13,6 +13,7 @@ use Carp qw(croak);
 
 use XML::Easy::Text qw(xml10_read_document);
 use XML::Easy::Classify qw(is_xml_element);
+use XML::Easy::Syntax qw($xml10_s_rx);
 
 use Test::Builder;
 my $tester = Test::Builder->new();
@@ -365,18 +366,18 @@ sub _is_xml {
     my $comp_expected_text = $expected_text;
 
     if ($options->{ignore_whitespace} || $options->{ignore_leading_whitespace} || $options->{ignore_surrounding_whitespace}) {
-      $comp_got_text =~ s/ \A \s* //x;
-      $comp_expected_text =~ s/ \A \s* //x;
+      $comp_got_text =~ s/ \A (?:$xml10_s_rx)* //x;
+      $comp_expected_text =~ s/ \A (?:$xml10_s_rx)* //x;
     }
 
     if ($options->{ignore_whitespace} || $options->{ignore_trailing_whitespace} || $options->{ignore_surrounding_whitespace}) {
-      $comp_got_text =~ s/ \s* \z//x;
-      $comp_expected_text =~ s/ \s* \z//x;
+      $comp_got_text =~ s/ (?:$xml10_s_rx)* \z//x;
+      $comp_expected_text =~ s/ (?:$xml10_s_rx)* \z//x;
     }
 
     if ($options->{ignore_whitespace} || $options->{ignore_different_whitespace}) {
-      $comp_got_text =~ s/ \s+ / /gx;
-      $comp_expected_text =~ s/ \s+ / /gx;
+      $comp_got_text =~ s/ (?:$xml10_s_rx)+ / /gx;
+      $comp_expected_text =~ s/ (?:$xml10_s_rx)+ / /gx;
     }
 
     if ($comp_got_text ne $comp_expected_text) {
@@ -633,11 +634,11 @@ Is considered to be different to
 
   <bar:fred xmlns:bar="http://www.twoshortplanks.com/namespaces/test/fred" />
 
-=item Perlish whitespace handling
+=item XML whitespace handling
 
-This module considers "whitespace" to be whatever matches a \s* in a
-regular expression.  This is not strictly identical to what the XML
-specification considers to be whitespace.
+This module considers "whitespace" to be what the XML specification considers
+to be whitespace.  This is subtily different to what Perl considers to be
+whitespace.
 
 =item No node reordering support
 
