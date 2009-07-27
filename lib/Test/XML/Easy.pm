@@ -447,9 +447,7 @@ sub is_well_formed_xml($;$) {
   $options = { %{$options}, description => "xml well formed test" }
     unless defined $options->{description};
 
-  eval { xml10_read_document($xml_string) };
-
-  unless ($@) {
+  if(eval { xml10_read_document($xml_string); 1 }) {
     $tester->ok(1, $options->{description});
     return 1;
   }
@@ -474,9 +472,7 @@ sub isnt_well_formed_xml($;$) {
   $options = { %{$options}, description => "xml not well formed test" }
     unless defined $options->{description};
 
-  eval { xml10_read_document($xml_string) };
-
-  if ($@) {
+  unless (eval { xml10_read_document($xml_string); 1 }) {
     $tester->ok(1, $options->{description});
     return 1;
   }
