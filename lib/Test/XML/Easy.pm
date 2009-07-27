@@ -486,7 +486,7 @@ sub isnt_xml($$;$) {
   my $options = shift;
 
   $options = { description => $options } unless ref $options eq "HASH";
-  $options = { %{$options}, description => "xml well formed test" }
+  $options = { %{$options}, description => "not xml test" }
     unless defined $options->{description};
 
   # temporarly ignore test output and just get the result of running
@@ -497,7 +497,7 @@ sub isnt_xml($$;$) {
 
   # did we get an error?  Note we don't check $@ directly incase
   # it's been reset by a weird DESTROY() eval...
-  unless (length $result) { croak $@; }
+  unless (defined($result) && length $result) { croak $@; }
 
   if ($result) {
     $tester->ok(1, $options->{description});
@@ -505,7 +505,7 @@ sub isnt_xml($$;$) {
   }
 
   $tester->ok(0, $options->{description});
-  $tester->diag("Unexpectedly matched the XML we didn't want to get");
+  $tester->diag("Unexpectedly matched the XML we didn't expect");
   return;
 }
 push @EXPORT, "isnt_xml";
