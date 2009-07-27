@@ -614,7 +614,7 @@ if you didn't include them in the string at all either.
 =item Limited entity handling
 
 We only support the five "core" named entities (i.e. C<&amp;>,
-C<&lt;>, C<&gt;>, C<&apos;> and C<&quot;>) and numerical entities
+C<&lt;>, C<&gt;>, C<&apos;> and C<&quot;>) and numerical character references
 (in decimal or hex form.)  It is not possible to declare further named
 entities and the precence of undeclared named entities will either cause
 an exception to be thrown (in the case of the expected string) or the test to
