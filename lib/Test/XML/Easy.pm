@@ -55,7 +55,7 @@ the documents schemantically equal as defined by the XML 1.0 specification
 model when parsed, so things like character sets and if you've used two tags
 or a self closing tags aren't important.)
 
-This modules is a strict superset of B<Test::XML>'s interface meaning if you
+This modules is a strict superset of B<Test::XML>'s interface, meaning if you
 were using that module to check if two identical documents were the same then
 this module should function as a drop in replacement.  Be warned, however,
 that this module by default is a lot stricter about how the XML documents
