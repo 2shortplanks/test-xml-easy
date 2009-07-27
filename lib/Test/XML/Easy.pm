@@ -439,7 +439,7 @@ Passes if and only if the string passed contains well formed XML.
 
 =cut
 
-sub is_well_formed_xml($$;$) {
+sub is_well_formed_xml($;$) {
   # TODO
 }
 push @EXPORT, "is_well_formed_xml";
@@ -450,7 +450,7 @@ Passes if and only if the string passed does not contain well formed XML.
 
 =cut
 
-sub isnt_well_formed_xml($$;$) {
+sub isnt_well_formed_xml($;$) {
   # TODO
 }
 push @EXPORT, "isnt_well_formed_xml";
