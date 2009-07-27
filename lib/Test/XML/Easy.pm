@@ -1,7 +1,7 @@
 package Test::XML::Easy;
 
 use strict;
-#use warnings; not for this module
+use warnings;
 
 use vars qw(@EXPORT @ISA);
 use Exporter;
