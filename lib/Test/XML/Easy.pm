@@ -440,7 +440,23 @@ Passes if and only if the string passed contains well formed XML.
 =cut
 
 sub is_well_formed_xml($;$) {
-  # TODO
+  my $xml_string = shift;
+  my $options = shift;
+
+  $options = { description => $options } unless ref $options eq "HASH";
+  $options = { %{$options}, description => "xml well formed test" }
+    unless defined $options->{description};
+
+  eval { xml10_read_document($xml_string) };
+
+  unless ($@) {
+    $tester->ok(1, $options->{description});
+    return 1;
+  }
+
+  $tester->ok(0, $options->{description});
+  $tester->diag($@);
+  return;
 }
 push @EXPORT, "is_well_formed_xml";
 
@@ -451,7 +467,23 @@ Passes if and only if the string passed does not contain well formed XML.
 =cut
 
 sub isnt_well_formed_xml($;$) {
-  # TODO
+  my $xml_string = shift;
+  my $options = shift;
+
+  $options = { description => $options } unless ref $options eq "HASH";
+  $options = { %{$options}, description => "xml not well formed test" }
+    unless defined $options->{description};
+
+  eval { xml10_read_document($xml_string) };
+
+  if ($@) {
+    $tester->ok(1, $options->{description});
+    return 1;
+  }
+
+  $tester->ok(0, $options->{description});
+  $tester->diag("Unexpectedly well formed XML");
+  return;
 }
 push @EXPORT, "isnt_well_formed_xml";
 
