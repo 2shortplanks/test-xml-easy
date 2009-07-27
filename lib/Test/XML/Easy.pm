@@ -188,7 +188,7 @@ sub is_xml($$;$) {
 
   # munge the options
   my $options = shift;
-  $options = { description => $options } unless ref $options;
+  $options = { description => $options } unless ref $options eq "HASH";
   $options = { %{$options}, description => "xml test" } unless defined $options->{description};
   unless (blessed $expected && $expected->isa("XML::Easy::Element")) {
     # throws an exception if there isn't a problem.
