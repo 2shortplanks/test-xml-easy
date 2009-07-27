@@ -67,7 +67,7 @@ This module, by default, exports a number of functions into your namespace.
 
 =over
 
-=item is_xml($xml_to_test, $expected_xml, $options_hashref)
+=item is_xml($xml_to_test, $expected_xml[, $options_hashref])
 
 Tests that the passed XML is "the same" as the expected XML.
 
@@ -448,7 +448,7 @@ sub _is_xml {
   return 1;
 }
 
-=item isnt_xml($xml_to_test, $not_expected_xml, $options_hashref)
+=item isnt_xml($xml_to_test, $not_expected_xml[, $options_hashref])
 
 Exactly the same as C<is_xml> (taking exactly the same options) but passes
 if and only if what is passed is different to the not expected XML.
@@ -511,7 +511,7 @@ sub isnt_xml($$;$) {
 }
 push @EXPORT, "isnt_xml";
 
-=item is_well_formed_xml($string_containing_xml, $description)
+=item is_well_formed_xml($string_containing_xml[, $description])
 
 Passes if and only if the string passed contains well formed XML.
 
@@ -536,7 +536,7 @@ sub is_well_formed_xml($;$) {
 }
 push @EXPORT, "is_well_formed_xml";
 
-=item isnt_well_formed_xml($string_not_containing_xml, $description)
+=item isnt_well_formed_xml($string_not_containing_xml[, $description])
 
 Passes if and only if the string passed does not contain well formed XML.
 
